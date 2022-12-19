@@ -5,13 +5,6 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
-const LikedTrackArtistSchema = new Schema({
-    likedTrackArtist: {
-        type: String,
-        required: true,
-    },
-});
-
 const LikedTracksSchema = new Schema({
     trackLink: {
         type: String,
@@ -21,7 +14,10 @@ const LikedTracksSchema = new Schema({
         type: String,
         required: true,
     },
-    trackArtist: [LikedTrackArtistSchema],
+    trackArtist: {
+        type: String,
+        required: true,
+    },
 });
 const LikedAlbumsSchema = new Schema({
     albumLink: {
@@ -84,6 +80,7 @@ const UserSchema = new Schema(
             required: [true, `please enter gender`],
             enum: [`Male`, `Female`, `Non-Binary`],
         },
+
         likedTracks: [LikedTracksSchema],
         likedAlbums: [LikedAlbumsSchema],
         resetPasswordToken: {

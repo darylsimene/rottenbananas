@@ -18,31 +18,43 @@ const RatingSchema = new Schema({
     },
 });
 
-const ArtistsSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
+const ArtistSchema = new Schema(
+    {
+        _id: {
+            type: Schema.Types.String,
+            ref: "Artist._id",
+        },
+        artistName: {
+            type: String,
+            required: true,
+        },
     },
-});
+    { _id: false }
+);
 
 const TrackSchema = new Schema(
     {
-        name: {
+        _id: {
             type: String,
             required: true,
-            maxlength: [150, "track name can not be more than 15 characters"],
+            unique: true,
+        },
+        trackName: {
+            type: String,
+            required: true,
         },
         trackLink: {
             type: String,
             required: true,
         },
-        album: {
-            type: String,
-            required: true,
+        trackAlbum: {
+            type: Schema.Types.String,
+            ref: "Album._id",
         },
-        artists: [ArtistsSchema],
-        ratings: [RatingSchema],
+        trackArtists: [ArtistSchema],
+        trackRatings: [RatingSchema],
     },
-    { timestamps: true }
+    { timestamps: true },
+    { _id: false }
 );
 module.exports = mongoose.model("Track", TrackSchema);

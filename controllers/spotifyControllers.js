@@ -1,4 +1,3 @@
-const Track = require("../models/User");
 var SpotifyWebApi = require("spotify-web-api-node");
 
 const spotifyApi = new SpotifyWebApi({
@@ -101,18 +100,53 @@ const getUserInfo = async (req, res, next) => {
 
 const getTrack = async (req, res, next) => {
     try {
-        const track = req.params.track;
-        const artist = req.params.artist;
-        console.log(req.params.track);
+        const track = req.query.track;
+        const artist = req.query.artist;
         const result = await spotifyApi.searchTracks(
             `track:${track} artist:${artist}`
         );
 
-        console.log(result.body.tracks);
+        let top5tracks = {};
+        const tracks = result.body.tracks;
+
+        console.log(tracks);
+
+        for (let i = 0; i < 5; i++) {
+            let trackInfo = {};
+            item = tracks.items[i];
+
+            trackInfo._id = item.id;
+            trackInfo.trackName = item.name;
+            trackInfo.trackLink = item.external_urls.spotify;
+
+            let albums = {};
+            albums._id = item.album.id;
+            albums.albumName = item.album.name;
+            albums.albumLink = item.album.external_urls.spotify;
+
+            trackInfo.trackAlbum = albums;
+
+            let artists = [];
+            for (let j = 0; j < item.artists.length; j++) {
+                let artistInfo = {};
+
+                artistInfo._id = item.artists[j].id;
+                artistInfo.artistName = item.artists[j].name;
+                artists[j] = artistInfo;
+            }
+            trackInfo["trackArtists"] = artists;
+
+            top5tracks[`track ${i + 1}`] = trackInfo;
+        }
+
+        // res.send(result);
+        res.send(top5tracks);
+
+        // console.log(result.body.tracks);
     } catch (err) {
         res.status(400)
             .setHeader("Content-Type", "application/json")
-            .json({ success: false, msg: "something wrong" });
+            .json({ success: false, msg: err.message });
     }
 };
 
