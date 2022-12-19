@@ -13,6 +13,5 @@ const {
 router.route("/").get(enterUser);
 router.route("/login").get(loginSpotify);
 router.route("/userInfo").get(getUserInfo);
-router.route("/search").get(getTrack);
 
 module.exports = router;
