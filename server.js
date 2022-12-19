@@ -69,7 +69,7 @@ app.listen(PORT, () => {
     console.log(`Server is listening on PORT: ${PORT}`);
 });
 
-//process our error and close off our server
+// process our error and close off our server
 // process.on("unhandledRejection", (err, promise) => {
 //     console.log(`Error: ${err.message}`);
 //     //kill our server
