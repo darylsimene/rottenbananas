@@ -18,7 +18,6 @@ const addReview = async (req, res, next) => {
             track.trackAlbum = req.body.trackAlbum._id;
             track.trackArtists = req.body.trackArtists;
             const result = await Track.create(track);
-            sendTokenResponse(result, 201, res);
         }
 
         // else {
@@ -56,7 +55,6 @@ const addTrack = async (req, res, next) => {
         track.trackAlbum = req.body.trackAlbum._id;
         track.trackArtists = req.body.trackArtists;
         const result = await Track.create(track);
-        sendTokenResponse(result, 201, res);
     } catch (err) {
         res.status(400)
             .setHeader("Content-Type", "application/json")
