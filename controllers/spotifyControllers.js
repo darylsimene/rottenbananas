@@ -65,8 +65,10 @@ const enterUser = async (req, res, next) => {
             console.log(
                 `\nSucessfully retreived access token. Expires in ${expires_in}s.\n`
             );
-            console.log(`helloooooooooooo \n${token}\n`);
-            res.send(access_token);
+            res.status(201).setHeader("Content-Type", "application/json").json({
+                access_token: access_token,
+                refresh_token: refresh_token,
+            });
 
             setInterval(async () => {
                 const data = await spotifyApi.refreshAccessToken();
@@ -100,18 +102,21 @@ const getUserInfo = async (req, res, next) => {
 
 const getTrack = async (req, res, next) => {
     try {
-        const track = req.query.track;
-        const artist = req.query.artist;
-        const result = await spotifyApi.searchTracks(
-            `track:${track} artist:${artist}`
+        const query = req.query.q;
+        const result = await spotifyApi.search(
+            `${query}`,
+            ["track", "artist"],
+            {
+                limit: 5,
+                market: "PH",
+            }
         );
 
         let top5tracks = {};
         const tracks = result.body.tracks;
+        let tracklength = tracks.items.length;
 
-        console.log(tracks);
-
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < tracklength; i++) {
             let trackInfo = {};
             item = tracks.items[i];
 
@@ -123,15 +128,18 @@ const getTrack = async (req, res, next) => {
             albums._id = item.album.id;
             albums.albumName = item.album.name;
             albums.albumLink = item.album.external_urls.spotify;
+            albums.releaseDate = item.album.release_date;
+            albums.albumType = item.album.type;
 
             trackInfo.trackAlbum = albums;
-
             let artists = [];
             for (let j = 0; j < item.artists.length; j++) {
                 let artistInfo = {};
 
                 artistInfo._id = item.artists[j].id;
                 artistInfo.artistName = item.artists[j].name;
+                artistInfo.artistLink = item.artists[j].external_urls.spotify;
+
                 artists[j] = artistInfo;
             }
             trackInfo["trackArtists"] = artists;
@@ -139,15 +147,72 @@ const getTrack = async (req, res, next) => {
             top5tracks[`track ${i + 1}`] = trackInfo;
         }
 
-        // res.send(result);
         res.send(top5tracks);
 
-        // console.log(result.body.tracks);
+        // res.send(result.body.tracks);
     } catch (err) {
-        res.status(400)
-            .setHeader("Content-Type", "application/json")
-            .json({ success: false, msg: err.message });
+        console.log(err.message);
     }
+};
+
+const getAlbum = async (req, res, next) => {
+    try {
+        const query = req.query.q;
+        const result = await spotifyApi.search(
+            `${query}`,
+            ["album", "artist"],
+            {
+                limit: 5,
+                market: "PH",
+            }
+        );
+
+        let top5Albums = {};
+        const album = result.body.albums;
+        let albumlength = album.items.length;
+
+        for (let i = 0; i < albumlength; i++) {
+            item = album.items[i];
+
+            let albumInfo = {
+                _id: item.id,
+                albumName: item.name,
+                albumLink: item.external_urls.spotify,
+                releaseDate: item.release_date,
+                albumType: item.album_type,
+            };
+
+            let artists = [];
+            for (let j = 0; j < item.artists.length; j++) {
+                let artistInfo = {};
+
+                artistInfo._id = item.artists[j].id;
+                artistInfo.artistName = item.artists[j].name;
+                artistInfo.artistLink = item.artists[j].external_urls.spotify;
+
+                artists[j] = artistInfo;
+            }
+            albumInfo["albumArtists"] = artists;
+
+            top5Albums[`album ${i + 1}`] = albumInfo;
+        }
+
+        res.send(top5Albums);
+
+        // res.send(result.body.albums);
+    } catch (error) {
+        resFailed(res, 400, error);
+    }
+};
+const resSuccess = (res, statusCode, result) => {
+    res.status(statusCode)
+        .setHeader("Content-Type", "application/json")
+        .json(result);
+};
+const resFailed = (res, statusCode, error) => {
+    res.status(statusCode)
+        .setHeader("Content-Type", "application/json")
+        .json({ msg: error.message });
 };
 
 module.exports = {
@@ -155,4 +220,5 @@ module.exports = {
     loginSpotify,
     enterUser,
     getTrack,
+    getAlbum,
 };

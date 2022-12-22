@@ -21,7 +21,6 @@ const {
     adminValidator,
 } = require("../middlewares/utils/validator");
 const protectedRoute = require("../middlewares/auth");
-const { addReview } = require("../controllers/trackControllers");
 
 router
     .route("/")
@@ -29,18 +28,13 @@ router
     .post(reqReceivedLogger, userValidator, postUser);
 // .delete(reqReceivedLogger, protectedRoute, adminValidator, deleteUsers);
 
-router.route("/addreview").post(reqReceivedLogger, addReview);
-
 router.route("/login").post(reqReceivedLogger, login);
 
 router.route("/forgotpassword").post(reqReceivedLogger, forgotPassword);
-
 router.route("/resetpassword").put(reqReceivedLogger, resetPassword);
-
 router
     .route("/updatepassword")
     .put(reqReceivedLogger, protectedRoute, updatePassword);
-
 router.route("/logout").get(reqReceivedLogger, protectedRoute, logout);
 
 router
@@ -48,5 +42,7 @@ router
     .get(reqReceivedLogger, getUser)
     .put(reqReceivedLogger, protectedRoute, updateUser)
     .delete(reqReceivedLogger, protectedRoute, deleteUser);
+
+    
 
 module.exports = router;

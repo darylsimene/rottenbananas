@@ -63,7 +63,7 @@ const postUser = async (req, res, next) => {
                 success: false,
                 msg: `${err.message}`,
             });
-        // throw new Error(`ERROR POSTING USER: ${err.message}`);
+        // new Error(`ERROR POSTING USER: ${err.message}`);
     }
 };
 
@@ -285,6 +285,24 @@ const logout = async (req, res, next) => {
         .json({ success: true, msg: "Successfully logged out!" });
 };
 
+const likedAlbum = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            text = `User ${req.params.userId} not founf`;
+            resSuccess(res, 400, text);
+        } else {
+            let review = user.likedAlbums.find((likedAlbums) =>
+                likedAlbums._id.equals(req.query.reviewId)
+            );
+            const trackInfo = await Track.findById(req.body._id);
+            trackInfo.trackReviews.push(req.body.trackReviews);
+            const result = await trackInfo.save();
+            resSuccess(res, 201, result);
+        }
+    } catch (error) {}
+};
+
 const sendTokenResponse = (user, statusCode, res) => {
     const token = user.getSignedJwtToken();
 
@@ -301,6 +319,16 @@ const sendTokenResponse = (user, statusCode, res) => {
     res.status(statusCode)
         .cookie("token", token, options)
         .json({ success: true, token });
+};
+const resSuccess = (res, statusCode, result) => {
+    res.status(statusCode)
+        .setHeader("Content-Type", "application/json")
+        .json(result);
+};
+const resFailed = (res, statusCode, error) => {
+    res.status(statusCode)
+        .setHeader("Content-Type", "application/json")
+        .json({ msg: error.message });
 };
 
 module.exports = {

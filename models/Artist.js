@@ -12,6 +12,10 @@ const ArtistSchema = new Schema(
             type: String,
             required: true,
         },
+        artistLink: {
+            type: String,
+            required: true,
+        },
     },
     { _id: false },
     { timestamps: true }

@@ -16,6 +16,8 @@ const cors = require("cors");
 
 const user = require(`./routes/user`);
 const bananas = require(`./routes/bananas`);
+const track = require(`./routes/track`);
+const album = require(`./routes/album`);
 
 //To read our config values
 dotenv.config({ path: "./config/config.env" });
@@ -57,8 +59,11 @@ app.use(cors());
 app.use(logger);
 
 //hook up our routes
+
 app.use("/user", user);
 app.use("/bananas", bananas);
+app.use("/track", track);
+app.use("/album", album);
 
 //handles our errors
 app.use(errorHandler);

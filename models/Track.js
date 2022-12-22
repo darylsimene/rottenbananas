@@ -1,7 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const RatingSchema = new Schema({
+const AlbumSchema = new Schema({
+    _id: {
+        type: Schema.Types.String,
+        ref: "Artist._id",
+    },
+    albumName: {
+        type: String,
+        required: true,
+    },
+    albumLink: {
+        type: String,
+        required: true,
+    },
+});
+
+const ReviewSchema = new Schema({
     rating: {
         type: Number,
         min: 1,
@@ -28,6 +43,10 @@ const ArtistSchema = new Schema(
             type: String,
             required: true,
         },
+        artistLink: {
+            type: String,
+            required: true,
+        },
     },
     { _id: false }
 );
@@ -48,11 +67,11 @@ const TrackSchema = new Schema(
             required: true,
         },
         trackAlbum: {
-            type: Schema.Types.String,
-            ref: "Album._id",
+            type: Object,
+            required: true,
         },
         trackArtists: [ArtistSchema],
-        trackRatings: [RatingSchema],
+        trackReviews: [ReviewSchema],
     },
     { timestamps: true },
     { _id: false }

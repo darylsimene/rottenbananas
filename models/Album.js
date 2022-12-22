@@ -11,11 +11,15 @@ const ArtistSchema = new Schema(
             type: String,
             required: true,
         },
+        artistLink: {
+            type: String,
+            required: true,
+        },
     },
     { _id: false }
 );
 
-const RatingSchema = new Schema({
+const ReviewSchema = new Schema({
     rating: {
         type: Number,
         min: 1,
@@ -47,8 +51,16 @@ const AlbumSchema = new Schema(
             type: String,
             required: true,
         },
-        artists: [ArtistSchema],
-        ratings: [RatingSchema],
+        releaseDate: {
+            type: Date,
+            required: true,
+        },
+        albumType: {
+            type: String,
+            required: true,
+        },
+        albumArtists: [ArtistSchema],
+        albumReviews: [ReviewSchema],
     },
     { timestamps: true },
     { _id: false }
