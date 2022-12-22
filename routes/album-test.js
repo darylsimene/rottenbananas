@@ -21,7 +21,7 @@ router.route("/:albumId/review").get(reqReceivedLogger, getAlbumReviews);
 router
     .route("/:albumId/review/total")
     .get(reqReceivedLogger, getTotalReviewsAlbum);
-//! ============== PUT/DELETE CERTAIN REVIEWS
+//! ============== PUT/DELETE CERTAIN REVIEWS (No protected Routes)
 router
     .route("/:albumId/review/:reviewId")
     .get(reqReceivedLogger, getAlbumReview)
