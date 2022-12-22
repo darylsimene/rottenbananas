@@ -1,2 +1,5 @@
 /node_modules
 /config/*
+/routes/album-test.js
+/routes/track-test.js
+/routes/user-test.js
