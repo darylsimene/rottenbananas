@@ -285,22 +285,36 @@ const logout = async (req, res, next) => {
         .json({ success: true, msg: "Successfully logged out!" });
 };
 
-const likedAlbum = async (req, res, next) => {
+const likeAlbum = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.userId);
         if (!user) {
-            text = `User ${req.params.userId} not founf`;
+            text = `User ${req.params.userId} not found`;
             resSuccess(res, 400, text);
         } else {
-            let review = user.likedAlbums.find((likedAlbums) =>
-                likedAlbums._id.equals(req.query.reviewId)
-            );
-            const trackInfo = await Track.findById(req.body._id);
-            trackInfo.trackReviews.push(req.body.trackReviews);
-            const result = await trackInfo.save();
+            user.likedAlbums.push(req.body);
+            const result = await user.save();
             resSuccess(res, 201, result);
         }
-    } catch (error) {}
+    } catch (error) {
+        resFailed(res, 400, error.message);
+    }
+};
+
+const likeTrack = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            text = `User ${req.params.userId} not found`;
+            resSuccess(res, 400, text);
+        } else {
+            user.likedTracks.push(req.body);
+            const result = await user.save();
+            resSuccess(res, 201, result);
+        }
+    } catch (error) {
+        resFailed(res, 400, error.message);
+    }
 };
 
 const sendTokenResponse = (user, statusCode, res) => {
@@ -343,4 +357,6 @@ module.exports = {
     resetPassword,
     updatePassword,
     logout,
+    likeAlbum,
+    likeTrack,
 };

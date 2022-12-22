@@ -9,12 +9,9 @@ const {
     getTrackReview,
     getTotalReviewsTrack,
 } = require("../controllers/trackControllers");
-const protectedRoute = require("../middlewares/auth");
 
 //! ============== ADD A REVIEW
-router
-    .route("/addreview")
-    .post(reqReceivedLogger, protectedRoute, addTrackReview);
+router.route("/addreview").post(reqReceivedLogger, addTrackReview);
 
 //! ============== GET REVIEWS FROM TRACKS
 router.route("/:trackId/review").get(reqReceivedLogger, getTrackReviews);
@@ -27,8 +24,8 @@ router
 //! ============== PUT/DELETE CERTAIN REVIEWS
 router
     .route("/:trackId/review/:reviewId")
-    .get(reqReceivedLogger, protectedRoute, getTrackReview)
-    .delete(reqReceivedLogger, protectedRoute, delTrackReview)
-    .put(reqReceivedLogger, protectedRoute, updTrackReview);
+    .get(reqReceivedLogger, getTrackReview)
+    .delete(reqReceivedLogger, delTrackReview)
+    .put(reqReceivedLogger, updTrackReview);
 
 module.exports = router;

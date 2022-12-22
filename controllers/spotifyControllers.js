@@ -204,16 +204,6 @@ const getAlbum = async (req, res, next) => {
         resFailed(res, 400, error);
     }
 };
-const resSuccess = (res, statusCode, result) => {
-    res.status(statusCode)
-        .setHeader("Content-Type", "application/json")
-        .json(result);
-};
-const resFailed = (res, statusCode, error) => {
-    res.status(statusCode)
-        .setHeader("Content-Type", "application/json")
-        .json({ msg: error.message });
-};
 
 module.exports = {
     getUserInfo,

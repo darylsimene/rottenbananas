@@ -6,11 +6,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
 const LikedTracksSchema = new Schema({
-    trackId: {
-        type: String,
-        required: true,
-    },
-    trackLink: {
+    _id: {
         type: String,
         required: true,
     },
@@ -18,17 +14,17 @@ const LikedTracksSchema = new Schema({
         type: String,
         required: true,
     },
-    trackArtist: {
+    trackLink: {
         type: String,
+        required: true,
+    },
+    trackArtists: {
+        type: Object,
         required: true,
     },
 });
 const LikedAlbumsSchema = new Schema({
-    albumId: {
-        type: String,
-        required: true,
-    },
-    albumLink: {
+    _id: {
         type: String,
         required: true,
     },
@@ -36,8 +32,12 @@ const LikedAlbumsSchema = new Schema({
         type: String,
         required: true,
     },
-    albumArtist: {
+    albumLink: {
         type: String,
+        required: true,
+    },
+    albumArtists: {
+        type: Object,
         required: true,
     },
 });

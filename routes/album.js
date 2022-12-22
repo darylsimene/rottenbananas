@@ -10,9 +10,12 @@ const {
     getAlbumReviews,
     getAlbumReview,
 } = require("../controllers/albumControllers");
+const protectedRoute = require("../middlewares/auth");
 
 //! ============== ADD A REVIEW
-router.route("/addreview").post(reqReceivedLogger, addAlbumReview);
+router
+    .route("/addreview")
+    .post(reqReceivedLogger, protectedRoute, addAlbumReview);
 
 //! ============== GET REVIEWS FROM ALBUM/ TRACKS
 router.route("/:albumId/review").get(reqReceivedLogger, getAlbumReviews);
@@ -24,8 +27,8 @@ router
 //! ============== PUT/DELETE CERTAIN REVIEWS
 router
     .route("/:albumId/review/:reviewId")
-    .get(reqReceivedLogger, getAlbumReview)
-    .delete(reqReceivedLogger, delAlbumReview)
-    .put(reqReceivedLogger, updAlbumReview);
+    .get(reqReceivedLogger, protectedRoute, getAlbumReview)
+    .delete(reqReceivedLogger, protectedRoute, delAlbumReview)
+    .put(reqReceivedLogger, protectedRoute, updAlbumReview);
 
 module.exports = router;

@@ -126,6 +126,7 @@ const updTrackReview = async (req, res, next) => {
         resFailed(res, 400, error);
     }
 };
+
 const getTotalReviewsTrack = async (req, res, next) => {
     try {
         const track = await Track.findById(req.params.trackId);
