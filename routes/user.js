@@ -45,11 +45,7 @@ router
     .put(reqReceivedLogger, protectedRoute, updateUser)
     .delete(reqReceivedLogger, protectedRoute, deleteUser);
 
-router
-    .route("/:userId/likealbum")
-    .post(reqReceivedLogger, protectedRoute, likeAlbum);
-router
-    .route("/:userId/liketrack")
-    .post(reqReceivedLogger, protectedRoute, likeTrack);
+router.route("/:userId/likealbum").post(reqReceivedLogger, likeAlbum);
+router.route("/:userId/liketrack").post(reqReceivedLogger, likeTrack);
 
 module.exports = router;
